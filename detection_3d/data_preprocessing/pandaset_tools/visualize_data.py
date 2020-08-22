@@ -19,9 +19,31 @@ import argparse
 import numpy as np
 import os
 import glob
+from detection_3d.tools.file_io import read_json
+from tqdm import tqdm
 
 
-def visualize_data(dataset_dir):
+def process_data(dataset_dir, camera="front_camera"):
+    """
+    The function visualizes data from pandaset.
+    Arguments:
+        dataset_dir: directory with  Pandaset data
+    """
+
+    # Get list of data samples
+    search_string = os.path.join(dataset_dir, "*")
+    seq_list = sorted(glob.glob(search_string))
+    for seq in tqdm(seq_list, desc="Process sequences", total=len(seq_list)):
+        # Make output dirs for data
+        depth_dir = os.path.join(seq, "vidar", camera, "depth")  # depth images
+        boxes_dir = os.path.join(
+            seq, "vidar", camera, "boxes"
+        )  # boxes in camera coordinates
+        # get lidar
+        search_string = os.path.join(seq, "lidar", "*.pkl.gz")
+        lidar_list = sorted(glob.glob(search_string))
+        lidar_pose_path = os.path.join(seq, "lidar", "poses.json")
+        lidar_pose = read_json(lidar_pose_path)
     print(dataset_dir)
 
 
@@ -29,4 +51,4 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Preprocess 3D pandaset.")
     parser.add_argument("--dataset_dir", default="../../dataset")
     args = parser.parse_args()
-    preprocess_data(args.dataset_dir)
+    process_data(args.dataset_dir)
