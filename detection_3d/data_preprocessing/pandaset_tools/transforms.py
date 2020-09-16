@@ -112,8 +112,7 @@ def transform_project_lidar_to_image(lidar_3d, intrinsics, max_x=1920, max_y=108
 
     lidar_3d = np.transpose(lidar_3d)
     pixels_2d = np.transpose(pixels_2d)
-    print(f"pixels_2d {pixels_2d.shape}")
-    print(f"lidar_3d {lidar_3d.shape}")
+
     fov_inds = (
         (pixels_2d[:, 0] < max_x)
         & (pixels_2d[:, 0] >= 0.0)
@@ -124,6 +123,5 @@ def transform_project_lidar_to_image(lidar_3d, intrinsics, max_x=1920, max_y=108
 
     pixels_2d = pixels_2d[fov_inds]
     lidar_3d = lidar_3d[fov_inds]
-    print(f"pixels_2d {pixels_2d.shape}")
-    print(f"lidar_3d {lidar_3d.shape}")
+
     return pixels_2d[:, :-1], lidar_3d

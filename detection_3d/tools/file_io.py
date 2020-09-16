@@ -22,6 +22,7 @@ import os
 import json
 from detection_3d.data_preprocessing.pandaset_tools.helpers import labels
 import cv2
+from PIL import Image
 
 
 def load_and_resize_image(image_filename, resize=None, data_type=tf.float32):
@@ -150,3 +151,11 @@ def load_dataset_list(dataset_dir, dataset_file, delimiter=";"):
 def save_depth_16bit(depth_filename, depth):
     depth = np.array(depth, dtype=np.uint16)
     cv2.imwrite(depth_filename, depth)
+
+
+def load_depth_16bit(depth_filename):
+    return np.asarray(Image.open(depth_filename)).astype("uint16")
+
+
+def load_image(image_filename):
+    return np.asarray(Image.open(image_filename), dtype=np.float32)
